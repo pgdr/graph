@@ -11,6 +11,9 @@
 class graph {
 public:
   
+  /// constructs new graph
+  graph();
+
   /// constructs new graph, reserves size s for vertices
   graph(int s);
 
@@ -34,10 +37,20 @@ public:
   /// gets the open neighborhood of v
   std::set<int> get_neighborhood(int v);
 
+  void print_vertices();
+
+  void print_edges();
+
+  /// returns the number of connected components, and 0 if empty vertex set
+  int connected_components();
+  
+  /// return number of vertices
+  int size();
 private:
   std::vector<int> vertices;
   std::vector<doubleton> edges;
   int vertex_count = 0;
+  void add_to_vertices_if_not(int v); /// adds v to vertices if not there
 };
 
 
