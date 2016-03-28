@@ -1,57 +1,78 @@
+/*
+ * graph.hpp
+ *
+ *  Created on: 28 Mar 2016
+ *      Author: pgd
+ */
 
-#ifndef LIB_GRAPH_HPP
-#define LIB_GRAPH_HPP
+#ifndef GRAPH_HPP_
+#define GRAPH_HPP_
 
-#include <vector>
+#include <cstddef>
 #include <set>
-#include "doubleton.hpp"
+#include <vector>
 
+#include "doubleton.hpp"
 
 /// Undirected simple graph
 class graph {
 public:
-  
-  /// constructs new graph
-  graph();
 
-  /// constructs new graph, reserves size s for vertices
-  graph(int s);
+    /// constructs new graph
+    graph();
 
-  ~graph();
-  
-  /// adds a new vertex with new vacant index
-  int add_vertex();
-  
-  /// adds a vertex with name v
-  bool add_vertex(int v);
-  
-  // boolean remove_vertex();
-  bool add_edge(int u, int v);
+    /// constructs new graph, reserves size s for vertices
+    graph(std::size_t s);
 
-  /// returns true iff (v,u) is an edge iff (u,v) is an edge
-  bool has_edge(int v, int u);
+    graph(const graph&);
 
-  /// true iff this is connected, false if no vertices
-  bool is_connected();
+    ~graph();
 
-  /// gets the open neighborhood of v
-  std::set<int> get_neighborhood(int v);
+    const graph shallow_copy();
 
-  void print_vertices();
+    /// adds a new vertex with new vacant index
+    int add_vertex();
 
-  void print_edges();
+    /// adds a vertex with name v
+    bool add_vertex(int v);
 
-  /// returns the number of connected components, and 0 if empty vertex set
-  int connected_components();
-  
-  /// return number of vertices
-  int size();
+    /// adds edge between u and v, adds vertices if not there already
+    bool add_edge(int u, int v);
+
+    /// adds the edge the input doubleton represents
+    bool add_edge(doubleton edge);
+
+    /// returns true iff (v,u) is an edge iff (u,v) is an edge
+    bool has_edge(int v, int u);
+
+    /// true iff this is connected, false if no vertices
+    bool is_connected();
+
+    /// gets the open neighborhood of v
+    std::set<int> get_neighborhood(int v);
+
+    /// deletes edge between v and u if exists, return true if exists
+    bool delete_edge(int v, int u);
+
+    /// deletes given edge if exists, return true if exists
+    bool delete_edge(doubleton e);
+
+    bool delete_vertex(int v);
+
+    void print_vertices();
+
+    void print_edges();
+
+    /// returns the number of connected components, and 0 if empty vertex set
+    int connected_components();
+
+    /// return number of vertices
+    std::size_t size() const;
 private:
-  std::vector<int> vertices;
-  std::vector<doubleton> edges;
-  int vertex_count = 0;
-  void add_to_vertices_if_not(int v); /// adds v to vertices if not there
+    std::vector<int> vertices;
+    std::vector<doubleton> edges;
+    int vertex_count;
+    void add_to_vertices_if_not(int v); /// adds v to vertices if not there
 };
 
-
-#endif // LIB_GRAPH_HPP
+#endif /* GRAPH_HPP_ */
