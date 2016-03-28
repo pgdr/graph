@@ -5,6 +5,7 @@
  *      Author: pgd
  */
 
+#include <cstddef>
 #include <iostream>
 
 #include "graph.hpp"
@@ -39,6 +40,19 @@ int main() {
     else
         std::cout << "g is disconnected" << std::endl;
 
+    std::cout << "computing vertex cover ... [0, " << g.size() << "]"
+            << std::endl;
+    for (std::size_t i = 0; i < g.size(); ++i) {
+        if (g.has_vertex_cover(i)) {
+            std::cout << "    g has vertex cover of size " << i << std::endl
+                    << "terminating vc" << std::endl;
+            i = g.size() + 1;
+        } else {
+            std::cout << "    g has no vertex cover of size " << i << std::endl;
+        }
+    }
+
+    std::cout << "delete 3" << std::endl;
     g.delete_vertex(3);
 
     if (g.is_connected())

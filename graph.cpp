@@ -37,8 +37,12 @@ graph::graph(const graph& g) :
 }
 
 graph::~graph() {
-    delete &edges;
-    delete &vertices;
+//    delete &edges;
+//    delete &vertices;
+}
+
+std::vector<doubleton> graph::get_edges() {
+    return edges;
 }
 
 std::size_t graph::size() const {
@@ -96,11 +100,33 @@ bool graph::delete_vertex(int v) {
 
     std::set<int> nv = get_neighborhood(v);
     for (std::set<int>::iterator it = nv.begin(); it != nv.end(); ++it) {
-        std::cout << "    deleting edge " << v << "," << *it << "."
-                << std::endl;
         delete_edge(v, *it);
     }
     return true;
+}
+
+bool has_vertex_cover_rec(graph &g, std::size_t vc) {
+    if (vc == 0)
+        return g.get_edges().empty();
+    doubleton edge = *g.get_edges().begin();
+
+    int v = edge.first;
+    int u = edge.second;
+
+    graph gv = g.shallow_copy();
+    gv.delete_vertex(v);
+    if (has_vertex_cover_rec(gv, vc - 1))
+        return true;
+    graph gu = g.shallow_copy();
+    gu.delete_vertex(u);
+    if (has_vertex_cover_rec(gu, vc - 1))
+        return true;
+
+    return false;
+}
+
+bool graph::has_vertex_cover(std::size_t vc) {
+    return has_vertex_cover_rec(*this, vc);
 }
 
 const graph graph::shallow_copy() {

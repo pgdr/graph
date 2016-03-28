@@ -28,6 +28,8 @@ public:
 
     ~graph();
 
+    std::vector<doubleton> get_edges();
+
     const graph shallow_copy();
 
     /// adds a new vertex with new vacant index
@@ -65,6 +67,8 @@ public:
 
     /// returns the number of connected components, and 0 if empty vertex set
     int connected_components();
+
+    bool has_vertex_cover(std::size_t);
 
     /// return number of vertices
     std::size_t size() const;
